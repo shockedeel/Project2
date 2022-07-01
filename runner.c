@@ -1,0 +1,52 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+int main()
+{
+    if (fork() > 0)
+    { // parent
+
+        if (fork() > 0)
+        {
+            if (fork() > 0)
+            {
+                if (fork() > 0)
+                {
+                    system("java com/Server 0");
+                }
+                else
+                {
+                    system("java com/Server 1");
+                }
+            }
+            else
+            {
+                system("java com/Server 2");
+            }
+        }
+        else
+        {
+            sleep(1);
+            system("java com/Client 0");
+        }
+    }
+    else
+    { // child
+        if (fork() > 0)
+        {
+            if (fork() > 0)
+            {
+                sleep(2);
+                system("java com/Client 1");
+            }
+            else
+            {
+                sleep(3);
+                system("java com/Client 2");
+            }
+        }
+        else
+        {
+        }
+    }
+}
