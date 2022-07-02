@@ -12,9 +12,16 @@ public class MessageParser {
             mp.fromServer = false;
             mp.message = recv.substring(colonInd + 1);
             if (hyphenInd != -1) {
-                mp.message = recv.substring(colonInd + 1, hyphenInd);
-                String file = recv.substring(hyphenInd + 1);
-                mp.file = file;
+                int commaInd = recv.indexOf(",");
+                if (commaInd != -1) {
+                    mp.message = recv.substring(colonInd + 1, commaInd);
+                    mp.file = recv.substring(hyphenInd + 1);
+                    mp.contents = recv.substring(commaInd + 1, hyphenInd);
+                } else {
+                    mp.message = recv.substring(colonInd + 1, hyphenInd);
+                    String file = recv.substring(hyphenInd + 1);
+                    mp.file = file;
+                }
 
             }
         } else {
@@ -47,6 +54,11 @@ public class MessageParser {
         return comp;
     }
 
+    public String compose(String message, String contents, String file) {
+        String comp = "C:" + message + "," + contents + "-" + file;
+        return comp;
+    }
+
     public String compose(String message, int timestamp, int process, String file) {
         String comp = "S," + timestamp + "," + process + ":" + message + "-" + file;
         return comp;
@@ -58,5 +70,6 @@ class MessageParse {
     int process;
     String file;
     String message;
+    String contents;
     boolean fromServer;
 }

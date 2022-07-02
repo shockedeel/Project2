@@ -36,17 +36,27 @@ int main()
         {
             if (fork() > 0)
             {
-                sleep(2);
+                sleep(1);
                 system("java com/Client 1");
             }
             else
             {
-                sleep(3);
+                sleep(1);
                 system("java com/Client 2");
             }
         }
         else
         {
+            if (fork() > 0)
+            {
+                sleep(1);
+                system("java com/Client 3");
+            }
+            else
+            {
+                sleep(1);
+                system("java com/Client 4");
+            }
         }
     }
 }
