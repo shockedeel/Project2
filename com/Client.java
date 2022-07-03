@@ -66,6 +66,16 @@ public class Client {
 
                 Thread.sleep(Generator.generateRandomSleepTime());
             }
+            int[] serverPorts = Info.getServerPorts();
+            for (int i = 0; i < serverPorts.length; i++) {
+                Socket s = new Socket("localhost", serverPorts[i]);
+                DataOutputStream dfin = new DataOutputStream(s.getOutputStream());
+                String m = parser.compose("TERMINATE");
+                dfin.writeBytes(m);
+                s.shutdownOutput();
+                s.close();
+            }
+            System.out.println("Client exiting...: " + CLIENT_ID);
 
         } catch (Exception e) {
             System.out.println("Exception happened in client at port: " + CLIENT_ID + "\n" + e.toString());

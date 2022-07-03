@@ -94,6 +94,11 @@ class ServerToServerService extends Thread {
             MessageParser parser = new MessageParser();
             while (true) {
                 sem.acquire();
+                if (servInfo.numFinishedClients >= 5) {
+                    sem.release();
+                    break;
+                }
+
                 for (String key : servInfo.requestMap.keySet()) {
                     ServerQueue sq = servInfo.requestMap.get(key);
                     while (!sq.replyQueue.isEmpty()) {
@@ -130,7 +135,7 @@ class ServerToServerService extends Thread {
                             System.out.println("Received all responses from servers, good to go!");
 
                             DataOutputStream dout = new DataOutputStream(top.s.getOutputStream());
-                            System.out.println("Output: " + sq.toString());
+
                             if (top.request.equals("READ")) {
                                 String line = fulfillRead(top.file);
                                 dout.writeBytes(line);
@@ -155,6 +160,7 @@ class ServerToServerService extends Thread {
 
                     }
                 }
+
                 sem.release();
                 Thread.sleep(100);
             }
@@ -205,7 +211,7 @@ class ServerService extends Thread {
                 DataInputStream dis = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                 DataOutputStream dout = new DataOutputStream(s.getOutputStream());
                 String msg = new String(dis.readAllBytes());
-                System.out.println(msg);
+
                 MessageParse m = parser.decompose(msg);
                 if (m.fromServer == false) {// RESPONDING TO ALL CLIENTS
                     if (m.message.equals("ENQUIRE")) {
@@ -222,7 +228,7 @@ class ServerService extends Thread {
                         } else {
                             servInfo.requestMap.get(req.file).requests.add(req);
                         }
-                        System.out.println(servInfo.requestMap.get(req.file).requests.size());
+
                         sem.release();
                     } else if (m.message.equals("WRITE")) {
                         sem.acquire();
@@ -236,9 +242,17 @@ class ServerService extends Thread {
                             servInfo.requestMap.get(req.file).requests.add(req);
                         }
                         sem.release();
+                    } else if (m.message.equals("TERMINATE")) {
+                        sem.acquire();
+                        servInfo.numFinishedClients++;
+                        if (servInfo.numFinishedClients >= 5) {
+                            sem.release();
+                            break;
+                        }
+                        sem.release();
                     }
                 } else {// MESSAGE CAME FROM ANOTHER SERVER
-                    System.out.println("Message from another server...: " + m.message);
+
                     if (m.message.equals("REPLY")) {
                         sem.acquire();
                         servInfo.clock.receiveMessageRule(m.timestamp);
@@ -273,6 +287,9 @@ class ServerService extends Thread {
                 }
 
             }
+            System.out
+                    .println("Server at port " + Info.getServerPorts()[portIndex] + " has finished servicing clients.");
+
         } catch (Exception e) {
 
             System.out.println("Exception occured in ServerService " + sock.getLocalPort() + ":\n" + e.toString());
@@ -308,11 +325,13 @@ class ServerQueue {
 class ServerInfo {
     private static ServerInfo info = null;
     LamportsClock clock;
+    int numFinishedClients;
     Map<String, ServerQueue> requestMap;// File, Queue with that files info
 
     private ServerInfo() {
         this.clock = new LamportsClock();
         this.requestMap = new HashMap<>();
+        this.numFinishedClients = 0;
     }
 
     public static ServerInfo getInstance() {

@@ -5,5 +5,9 @@ main:
 	javac ./com/MessageParser.java
 	javac ./com/Mutex.java 
 	javac ./com/Client.java
-	gcc runner.c	
+	gcc runner.c -o runner
+	gcc check.c -o check
 	sh initFiles.sh
+	./runner
+	./check
+

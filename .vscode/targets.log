@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Thu Jun 30 20:02:08 2022
+# Make data base, printed on Sat Jul  2 22:41:15 2022
 
 # Variables
 
@@ -46,7 +46,6 @@ VSCODE_VERBOSE_LOGGING = true
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 VSCODE_IPC_HOOK_EXTHOST = /var/folders/0l/jn_nnhz54ld3lbrb3w_k0cp00000gn/T/vscode-ipc-af69f578-bd8d-45f6-8b68-80c4524b1e9e.sock
- 
 # environment
 VSCODE_CWD = /Users/kolbesurran/Desktop/Advanced_OS
 # environment
@@ -173,9 +172,9 @@ VSCODE_PID = 61152
 # Directories
 
  
-# . (device 16777221, inode 44488069): 12 files, no impossibilities.
+# . (device 16777221, inode 44488069): 16 files, no impossibilities.
 
-# 12 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -201,7 +200,7 @@ all:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-30 20:01:44
+#  Last modified 2022-07-02 22:40:18
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -224,8 +223,11 @@ main:
 	javac ./com/MessageParser.java
 	javac ./com/Mutex.java 
 	javac ./com/Client.java
-	gcc runner.c	
+	gcc runner.c -o runner
+	gcc check.c -o check
 	sh initFiles.sh
+	./runner
+	./check
 	
 
 # files hash-table stats:
@@ -241,6 +243,6 @@ main:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Thu Jun 30 20:02:08 2022
+# Finished Make data base on Sat Jul  2 22:41:15 2022
 
  

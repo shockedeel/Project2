@@ -13,7 +13,7 @@ int main()
                 if (fork() > 0)
                 {
                     system("java com/Server 0");
-                }
+                                }
                 else
                 {
                     system("java com/Server 1");
