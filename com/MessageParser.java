@@ -3,7 +3,7 @@ package com;
 public class MessageParser {
 
     public MessageParse decompose(String recv) {
-        recv = recv.strip();
+        recv = Utils.strip(recv);
         MessageParse mp = new MessageParse();
         int colonInd = recv.indexOf(":");
         String type = recv.substring(0, colonInd);

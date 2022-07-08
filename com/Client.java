@@ -22,10 +22,10 @@ public class Client {
             DataInputStream din = new DataInputStream(enquire.getInputStream());
             dout.writeBytes(enq);
             enquire.shutdownOutput();
-            String enquireResponse = new String(din.readAllBytes());
+            String enquireResponse = Utils.readAllBytes(din);
             String[] f = enquireResponse.split(",");
             for (String fi : f) {
-                files.add(fi.strip());
+                files.add(Utils.strip(fi));
             }
             enquire.close();
 
@@ -42,7 +42,7 @@ public class Client {
                     String comp = parser.compose("READ", file);
                     dop.writeBytes(comp);
                     s.shutdownOutput();
-                    String recv = new String(dip.readAllBytes());
+                    String recv = Utils.readAllBytes(dip);
                     System.out.println("\n\nFROM SERVER AT CLIENT (READ) " + CLIENT_ID + ": " + recv + "\n\n");
                     s.close();
                 } else {

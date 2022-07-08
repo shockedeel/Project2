@@ -210,7 +210,7 @@ class ServerService extends Thread {
                 Socket s = sock.accept();
                 DataInputStream dis = new DataInputStream(new BufferedInputStream(s.getInputStream()));
                 DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-                String msg = new String(dis.readAllBytes());
+                String msg = Utils.readAllBytes(dis);
 
                 MessageParse m = parser.decompose(msg);
                 if (m.fromServer == false) {// RESPONDING TO ALL CLIENTS
