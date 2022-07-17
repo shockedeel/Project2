@@ -47,9 +47,14 @@ int files_are_correct(char *file_names[])
         return -1;
     }
     ch1 = 'a';
+    int line = 1;
     int flag = 0;
     while (ch1 != EOF)
     {
+        if (ch1 == '\n')
+        {
+            line++;
+        }
         ch1 = fgetc(fp1);
         ch2 = fgetc(fp2);
         ch3 = fgetc(fp3);
@@ -61,7 +66,7 @@ int files_are_correct(char *file_names[])
     }
     if (flag)
     {
-        printf("There was a descripancy in the files...");
+        printf("There was a descripancy in the files at line %d", line);
         return 0;
     }
     return 1;

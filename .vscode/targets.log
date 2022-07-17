@@ -6,19 +6,19 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Fri Jul  8 09:56:28 2022
 
+# Make data base, printed on Tue Jul 12 21:06:14 2022
+
+ 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
-# environment
-NVM_IOJS_ORG_MIRROR = https://iojs.org/dist
 # automatic
 ?F = $(notdir $?)
-# environment
-VSCODE_LOG_NATIVE = false
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -36,35 +36,23 @@ _ = /usr/bin/make
 # makefile (from `makefile', line 1)
 MAKEFILE_LIST :=  makefile
 # environment
-VSCODE_VERBOSE_LOGGING = true
-# environment
 __CFBundleIdentifier = com.microsoft.VSCode
-# environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/0l/jn_nnhz54ld3lbrb3w_k0cp00000gn/T/vscode-ipc-8c1b7f46-072d-4464-a7d4-128aa6bcc4e9.sock
 # environment
 VSCODE_CWD = /
 # environment
-PATH = /Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Users/kolbesurran/.nvm/versions/node/v14.16.0/bin:/opt/local/bin:/opt/local/sbin:/Users/kolbesurran/anaconda3/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/Library/Frameworks/Python.framework/Versions/3.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Applications/Xamarin Workbooks.app/Contents/SharedSupport/path-bin
-# environment
-NVM_BIN = /Users/kolbesurran/.nvm/versions/node/v14.16.0/bin
-# environment
-VSCODE_LOG_STACK = false
+PATH = /usr/bin:/bin:/usr/sbin:/sbin
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.8xFMyGvpLs/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.5aZRxYN26R/Listeners
 # automatic
 %F = $(notdir $%)
-# environment
-VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /Users/kolbesurran/Desktop/Advanced_OS/Project2
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
-# environment
-MANPATH = /Users/kolbesurran/.nvm/versions/node/v14.16.0/share/man:/opt/local/share/man:/Users/kolbesurran/anaconda3/share/man:/Library/Frameworks/Python.framework/Versions/3.7/share/man:/Library/Frameworks/Python.framework/Versions/3.5/share/man:/usr/local/share/man:/usr/share/man:/Library/TeX/texbin/man:/Library/Apple/usr/share/man:/Library/Frameworks/Mono.framework/Versions/Current/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -72,13 +60,11 @@ HOME = /Users/kolbesurran
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/kolbesurran/Library/Application Support/Code/CachedData/57fd6d0195bb9b9d1b49f6da5db789060795de47
+VSCODE_CODE_CACHE_PATH = /Users/kolbesurran/Library/Application Support/Code/CachedData/92d25e35d9bf1a6b16f7d0758f25d48ace11e5b9
 # environment
 LOGNAME = kolbesurran
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
-# environment
-NVM_CD_FLAGS = 
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -90,7 +76,7 @@ MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
 # environment
-SHLVL = 2
+SHLVL = 1
 # default
 MAKE_VERSION := 3.81
 # environment
@@ -108,7 +94,9 @@ TMPDIR = /var/folders/0l/jn_nnhz54ld3lbrb3w_k0cp00000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/kolbesurran/Library/Application Support/Code/1.67.0-main.sock
+VSCODE_IPC_HOOK = /Users/kolbesurran/Library/Application Support/Code/1.69.0-main.sock
+# environment
+MallocNanoZone = 0
 # makefile
 MAKEFLAGS = Rrqp
 # environment
@@ -116,9 +104,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-NVM_DIR = /Users/kolbesurran/.nvm
-# environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.40284802.40284808
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.44911236.44911242
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -133,8 +119,6 @@ MAKEFILES :=
 <F = $(notdir $<)
 # environment
 LC_ALL = C
-# environment
-NVM_NODEJS_ORG_MIRROR = https://nodejs.org/dist
 # automatic
 ^F = $(notdir $^)
 # default
@@ -146,9 +130,9 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 3003
+VSCODE_PID = 805
 # variable set hash-table stats:
-# Load=68/1024=7%, Rehash=0, Collisions=2/92=2%
+# Load=58/1024=6%, Rehash=0, Collisions=1/82=1%
 
 # Pattern-specific Variable Values
 
@@ -156,9 +140,10 @@ VSCODE_PID = 3003
 
 # Directories
 
-# . (device 16777221, inode 44488069): 16 files, no impossibilities.
+# . (device 16777221, inode 44488069): 17 files, no impossibilities.
 
-# 16 files, no impossibilities in 1 directories.
+ 
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -184,7 +169,7 @@ all:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-05 11:22:32
+#  Last modified 2022-07-12 21:05:27
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -225,6 +210,8 @@ main:
 	gcc check.c -o check
 	sh initFiles.sh
 	./runner
+	./check
+	sh reset.sh
 	
 
 # files hash-table stats:
@@ -239,9 +226,8 @@ main:
 # # of strcache buffers: 1
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+ 
 
-# Finished Make data base on Fri Jul  8 09:56:28 2022
+# Finished Make data base on Tue Jul 12 21:06:14 2022
 
  
-make: *** No rule to make target `all'.  Stop.
-

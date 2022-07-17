@@ -13,7 +13,7 @@ int main()
                 if (fork() > 0)
                 {
                     system("java com/Server 0");
-                                }
+                }
                 else
                 {
                     system("java com/Server 1");
@@ -26,7 +26,6 @@ int main()
         }
         else
         {
-            sleep(1);
             system("java com/Client 0");
         }
     }
@@ -36,12 +35,12 @@ int main()
         {
             if (fork() > 0)
             {
-                sleep(1);
+
                 system("java com/Client 1");
             }
             else
             {
-                sleep(1);
+
                 system("java com/Client 2");
             }
         }
@@ -49,12 +48,12 @@ int main()
         {
             if (fork() > 0)
             {
-                sleep(1);
+
                 system("java com/Client 3");
             }
             else
             {
-                sleep(1);
+
                 system("java com/Client 4");
             }
         }

@@ -23,3 +23,5 @@ main:
 	gcc check.c -o check
 	sh initFiles.sh
 	./runner
+	./check
+	sh reset.sh

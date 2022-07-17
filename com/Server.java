@@ -18,9 +18,7 @@ public class Server {
         Semaphore sem = new Semaphore(1);
 
         ServerService serv = new ServerService(SERVER_PORT, portIndex, sem);
-        ServerToServerService sts = new ServerToServerService(sem, portIndex);
         serv.start();
-        sts.start();
 
     }
 }
@@ -55,36 +53,6 @@ class ServerToServerService extends Thread {
         } else if (portIndex == 2) {
             this.dir = "s3";
         }
-    }
-
-    private String fulfillRead(String f) {
-        try {
-            File file = new File(this.dir + "/" + f);
-            Scanner reader = new Scanner(file);
-            String line = "";
-            while (reader.hasNextLine()) {
-                line = reader.nextLine();
-            }
-            return line;
-
-        } catch (Exception e) {
-            System.out.println("Unable to read file: " + e.toString());
-        }
-        return "Unable to read file";
-    }
-
-    private boolean fulfillWrite(String file, String contents) {
-        try {
-            FileWriter fileWriter = new FileWriter(this.dir + "/" + file, true);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-            writer.write(contents);
-            writer.close();
-            fileWriter.close();
-            return true;
-        } catch (Exception e) {
-            System.out.println("Unable to write to file at Server: \n" + e.toString());
-        }
-        return false;
     }
 
     @Override
@@ -137,10 +105,10 @@ class ServerToServerService extends Thread {
                             DataOutputStream dout = new DataOutputStream(top.s.getOutputStream());
 
                             if (top.request.equals("READ")) {
-                                String line = fulfillRead(top.file);
-                                dout.writeBytes(line);
+                                // String line = fulfillRead(top.file);
+                                // dout.writeBytes(line);
                             } else if (top.request.equals("WRITE")) {
-                                fulfillWrite(top.file, top.contents);
+                                // fulfillWrite(top.file, top.contents);
                             }
                             top.s.shutdownOutput();
 
@@ -199,6 +167,36 @@ class ServerService extends Thread {
         }
     }
 
+    private String fulfillRead(String f) {
+        try {
+            File file = new File(this.dir + "/" + f);
+            Scanner reader = new Scanner(file);
+            String line = "";
+            while (reader.hasNextLine()) {
+                line = reader.nextLine();
+            }
+            return line;
+
+        } catch (Exception e) {
+            System.out.println("Unable to read file: " + e.toString());
+        }
+        return "Unable to read file";
+    }
+
+    private boolean fulfillWrite(String file, String contents) {
+        try {
+            FileWriter fileWriter = new FileWriter(this.dir + "/" + file, true);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            writer.write(contents);
+            writer.close();
+            fileWriter.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Unable to write to file at Server: \n" + e.toString());
+        }
+        return false;
+    }
+
     @Override
     public void run() {
         MessageParser parser = new MessageParser();
@@ -213,37 +211,27 @@ class ServerService extends Thread {
                 String msg = Utils.readAllBytes(dis);
 
                 MessageParse m = parser.decompose(msg);
-                if (m.fromServer == false) {// RESPONDING TO ALL CLIENTS
+                if (m.fromServer == false) {// RESPONDING TO CLIENTS
                     if (m.message.equals("ENQUIRE")) {
                         String res = fulfillEnquire();
                         dout.writeBytes(res);
                         s.close();
                     } else if (m.message.equals("READ")) {
-                        sem.acquire();
-                        int timestamp = servInfo.clock.getClock();
-                        Request req = new Request(m.file, "READ", timestamp, s);
-                        if (!servInfo.requestMap.containsKey(req.file)) {
-                            servInfo.requestMap.put(req.file, new ServerQueue());
-                            servInfo.requestMap.get(req.file).requests.add(req);
-                        } else {
-                            servInfo.requestMap.get(req.file).requests.add(req);
-                        }
+                        String line = fulfillRead(m.file);
+                        System.out.println("read fulfill: " + line);
+                        dout.writeBytes(line);
+                        s.shutdownOutput();
 
-                        sem.release();
                     } else if (m.message.equals("WRITE")) {
-                        sem.acquire();
-                        int timestamp = servInfo.clock.getClock();
-                        Request req = new Request(m.file, "WRITE", timestamp, s);
-                        req.contents = m.contents;
-                        if (!servInfo.requestMap.containsKey(req.file)) {
-                            servInfo.requestMap.put(req.file, new ServerQueue());
-                            servInfo.requestMap.get(req.file).requests.add(req);
-                        } else {
-                            servInfo.requestMap.get(req.file).requests.add(req);
-                        }
-                        sem.release();
+                        System.out.println("fulfilling write");
+                        fulfillWrite(m.file, m.contents);
+                        String send = parser.compose("ACK");
+                        dout.writeBytes(send);
+                        s.shutdownOutput();
+
                     } else if (m.message.equals("TERMINATE")) {
                         sem.acquire();
+                        System.out.println("RECV TERMINATE");
                         servInfo.numFinishedClients++;
                         if (servInfo.numFinishedClients >= 5) {
                             sem.release();
@@ -251,44 +239,12 @@ class ServerService extends Thread {
                         }
                         sem.release();
                     }
-                } else {// MESSAGE CAME FROM ANOTHER SERVER
-
-                    if (m.message.equals("REPLY")) {
-                        sem.acquire();
-                        servInfo.clock.receiveMessageRule(m.timestamp);
-                        servInfo.requestMap.get(m.file).requests.peek().numReplies++;
-
-                        sem.release();
-                    } else if (m.message.equals("REQUEST")) {
-                        sem.acquire();
-
-                        servInfo.clock.receiveMessageRule(m.timestamp);
-
-                        if (!servInfo.requestMap.containsKey(m.file)) {// Local queue doesn't have this file
-                            servInfo.requestMap.put(m.file, new ServerQueue());
-                        }
-                        ServerQueue q = servInfo.requestMap.get(m.file);
-                        Request top = q.requests.peek();
-                        Request foreign = new Request(m.file, "WRITE", m.timestamp, null);
-                        foreign.process = m.process;
-                        if (top == null || (top.timestamp > m.timestamp)
-                                || (top.timestamp == m.timestamp && m.process < portIndex)) {// SEND RESPONSE TOTAL
-                                                                                             // ORDERING
-                            System.out.println("Response Queued...");
-                            q.replyQueue.add(foreign);
-                        } else {// DEFER
-                            System.out.println("Deferred Response...");
-                            q.deferred.add(foreign);
-                        }
-                        sem.release();
-                    }
-                    s.close();
-
                 }
 
             }
-            System.out
-                    .println("Server at port " + Info.getServerPorts()[portIndex] + " has finished servicing clients.");
+            // System.out
+            // .println("Server at port " + Info.getServerPorts()[portIndex] + " has
+            // finished servicing clients.");
 
         } catch (Exception e) {
 
@@ -363,5 +319,9 @@ class Request {
         this.timestamp = timestamp;
         this.numReplies = 0;
         this.s = s;
+    }
+
+    public String toString() {
+        return this.request + ":" + this.file;
     }
 }

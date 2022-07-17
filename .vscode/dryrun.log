@@ -1,4 +1,4 @@
-make --dry-run --always-make --keep-going --print-directory
+make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/kolbesurran/Desktop/Advanced_OS/Project2'
 rm ./com/Client.class
 rm ./com/Generator.class
@@ -24,5 +24,7 @@ gcc runner.c -o runner
 gcc check.c -o check
 sh initFiles.sh
 ./runner
+./check
+sh reset.sh
 make: Leaving directory `/Users/kolbesurran/Desktop/Advanced_OS/Project2'
  
